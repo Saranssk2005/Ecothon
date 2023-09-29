@@ -1,0 +1,66 @@
+import random
+
+# Define the game grid size
+GRID_SIZE = 10
+
+# Initialize player position
+player_x = 0
+player_y = 0
+
+# Initialize eco items and obstacles
+eco_items = [(2, 2), (4, 6), (6, 3), (8, 8)]
+obstacles = [(1, 1), (3, 5), (5, 4), (7, 7)]
+
+# Initialize score
+score = 0
+
+# Main game loop
+while True:
+    # Create the game grid
+    grid = [[' ' for _ in range(GRID_SIZE)] for _ in range(GRID_SIZE)]
+
+    # Place the player on the grid
+    grid[player_y][player_x] = 'P'
+
+    # Place eco items on the grid
+    for item in eco_items:
+        x, y = item
+        grid[y][x] = 'E'
+
+    # Place obstacles on the grid
+    for obstacle in obstacles:
+        x, y = obstacle
+        grid[y][x] = 'X'
+
+    # Display the game grid
+    for row in grid:
+        print(' '.join(row))
+    
+    # Check for collision with eco items
+    if (player_x, player_y) in eco_items:
+        score += 1
+        print(f'You collected an eco item! Score: {score}')
+        eco_items.remove((player_x, player_y))
+
+    # Check for collision with obstacles
+    if (player_x, player_y) in obstacles:
+        print('Game Over! You hit an obstacle.')
+        break
+
+    # Check for game completion
+    if not eco_items:
+        print('Congratulations! You collected all eco items.')
+        break
+
+    # Get user input
+    move = input('Enter a move (w/a/s/d): ')
+
+    # Update player position based on user input
+    if move == 'w' and player_y > 0:
+        player_y -= 1
+    elif move == 'a' and player_x > 0:
+        player_x -= 1
+    elif move == 's' and player_y < GRID_SIZE - 1:
+        player_y += 1
+    elif move == 'd' and player_x < GRID_SIZE - 1:
+        player_x += 1
